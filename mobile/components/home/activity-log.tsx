@@ -100,7 +100,7 @@ export default function ActivityLog() {
       }
     } catch (error) {
       console.log("Error fetching transactions:", error);
-      showErrorToast("Failed to load. Please try again.");
+      // showErrorToast("Failed to load. Please try again.");
     } finally {
       setLoading(false);
     }
