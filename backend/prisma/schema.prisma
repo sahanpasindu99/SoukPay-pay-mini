@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String        @id @default(uuid())
+  email       String        @unique
+  name        String
+  password    String        
+  pushToken   String?       @map("push_token")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  ledger      PointLedger[]
+  redemptions Redemption[]
+}
+
+model PointLedger {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  delta     Int         //positive for earn/negative for redeem
+  reason    String
+  createdAt DateTime @default(now()) @map("created_at")
+}
+
+model Reward {
+  id             String       @id @default(uuid())
+  name           String
+  description    String
+  imageUrl       String?      @map("image_url")
+  pointsCost     Int          @map("points_cost")
+  stockRemaining Int          @map("stock_remaining")
+  isActive       Boolean      @default(true) @map("is_active")
+  redemptions    Redemption[]
+}
+
+model Redemption {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  user           User     @relation(fields: [userId], references: [id])
+  rewardId       String   @map("reward_id")
+  reward         Reward   @relation(fields: [rewardId], references: [id])
+  pointsCost     Int      @map("points_cost")
+  idempotencyKey String   @unique @map("idempotency_key")
+  createdAt      DateTime @default(now()) @map("created_at")
+}
