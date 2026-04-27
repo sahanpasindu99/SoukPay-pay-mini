@@ -35,7 +35,7 @@ Generate Native Project Folders Native directories
 email - sahan@example.com or souk@soukpay.com
 password - password123
 
-With more time, i would do -
+## With more time, i would do -
 
 - Advanced Image Caching - Swapping the standard Image component for expo-image to provide disk caching
 
